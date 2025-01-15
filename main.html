@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CaesarSalad: A dumb QR-code based Encrypt/Decrypt tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px;
+            font-size: 1em;
+        }
+        #result {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Briyan's Caesar Salad</h1>
+    <p>A dumb QR-code based Encrypt/Decrypt tool. Enter text to encrypt or decrypt with a shift of your choice.</p>
+
+    <label for="text">Text: </label>
+    <input type="text" id="text" placeholder="Enter text here">
+    <br>
+    
+    <label for="shift">Shift (1-25): </label>
+    <input type="number" id="shift" value="3" min="1" max="25">
+    <br>
+
+    <button onclick="encrypt()">Encrypt</button>
+    <button onclick="decrypt()">Decrypt</button>
+    <br>
+
+    <p id="result"></p>
+
+    <script>
+        function caesarCipher(text, shift, encrypt = true) {
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let result = '';
+            shift = shift % 26;
+            if (!encrypt) {
+                shift = -shift;
+            }
+
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i].toUpperCase();
+                if (alphabet.includes(char)) {
+                    let index = (alphabet.indexOf(char) + shift + 26) % 26;
+                    result += alphabet[index];
+                } else {
+                    result += text[i];
+                }
+            }
+
+            return result;
+        }
+
+        function encrypt() {
+            const text = document.getElementById('text').value;
+            const shift = parseInt(document.getElementById('shift').value);
+            const encryptedText = caesarCipher(text, shift);
+            document.getElementById('result').innerText = 'Encrypted: ' + encryptedText;
+        }
+
+        function decrypt() {
+            const text = document.getElementById('text').value;
+            const shift = parseInt(document.getElementById('shift').value);
+            const decryptedText = caesarCipher(text, shift, false);
+            document.getElementById('result').innerText = 'Decrypted: ' + decryptedText;
+        }
+    </script>
+
+</body>
+</html>
