@@ -41,20 +41,22 @@
 
     <script>
         function caesarCipher(text, shift, encrypt = true) {
-            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const lower = 'abcdefghijklmnopqrstuvwxyz';
             let result = '';
-            shift = shift % 26;
+            shift = ((shift % 26) + 26) % 26;
             if (!encrypt) {
-                shift = -shift;
+                shift = (26 - shift) % 26;
             }
 
             for (let i = 0; i < text.length; i++) {
-                let char = text[i].toUpperCase();
-                if (alphabet.includes(char)) {
-                    let index = (alphabet.indexOf(char) + shift + 26) % 26;
-                    result += alphabet[index];
+                const char = text[i];
+                if (upper.includes(char)) {
+                    result += upper[(upper.indexOf(char) + shift) % 26];
+                } else if (lower.includes(char)) {
+                    result += lower[(lower.indexOf(char) + shift) % 26];
                 } else {
-                    result += text[i];
+                    result += char;
                 }
             }
 
